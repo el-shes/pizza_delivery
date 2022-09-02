@@ -4,9 +4,19 @@
 
 <h2>{{ note }}</h2>
 
+{#<form enctype="multipart/form-data" action="{% url 'pizza:create_order'  %}" method="post">#}
 <form action="{% url 'pizza:create_order'  %}" method="post">
 
     {% csrf_token %}
     {{ pizzaform }}
     <input type="submit" value="Confirm Your Order">
+</form>
+
+<br><br>
+
+What to order more than one?
+
+<form action="{% url 'pizza:pizzas' %}" method="get">
+    {{ multiple_form }}
+    <input type="submit" value="Get Pizzas">
 </form>
