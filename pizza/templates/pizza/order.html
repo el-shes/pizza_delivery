@@ -3,9 +3,14 @@
 <h4> Order </h4>
 
 <h2>{{ note }}</h2>
+<br><br>
+{% if created_pizza_pk %}
+    <a href="{% url 'pizza:edit_order' created_pizza_pk %}">Edit your Order!</a>
+{% endif %}
 
 {#<form enctype="multipart/form-data" action="{% url 'pizza:create_order'  %}" method="post">#}
-<form action="{% url 'pizza:create_order'  %}" method="post">
+
+<form action="{% url 'pizza:create_order' %}" method="post">
 
     {% csrf_token %}
     {{ pizzaform }}

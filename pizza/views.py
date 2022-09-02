@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .forms import PizzaForm, MultiplePizzaForm
 from django.forms import formset_factory
+from .models import Pizza
 
 
 # Create your views here.
@@ -17,12 +18,14 @@ def order(request):
         # filled_form = PizzaForm(request.POST, request.FILES)
         filled_form = PizzaForm(request.POST)
         if filled_form.is_valid():
-            filled_form.save()
+            created_pizza = filled_form.save()
+            created_pizza_pk = created_pizza.id
             note = "Thanks for order! Your %s %s and %s pizza is on it's way!" % (filled_form.cleaned_data['size'],
                                                                                   filled_form.cleaned_data['topping1'],
                                                                                   filled_form.cleaned_data['topping2'])
             new_pizza_form = PizzaForm()
-            return render(request, 'pizza/order.html', {'pizzaform': new_pizza_form, 'note': note,
+            return render(request, 'pizza/order.html', {'created_pizza_pk': created_pizza_pk,
+                                                        'pizzaform': new_pizza_form, 'note': note,
                                                         'multiple_form': multiple_form})
     else:
         form = PizzaForm()
@@ -48,3 +51,17 @@ def pizzas(request):
         return render(request, 'pizza/pizzas.html', {'note': note, 'formset': formset})
     else:
         return render(request, 'pizza/pizzas.html', {'formset': formset})
+
+
+def edit_order(request, pk):
+    pizza = Pizza.objects.get(id=pk)
+    form = PizzaForm(instance=pizza)
+    if request.method == 'POST':
+        filled_form = PizzaForm(request.POST, instance=pizza)
+        if filled_form.is_valid():
+            filled_form.save()
+            form = filled_form
+            note = "Order has been updated!"
+            return render(request, 'pizza/edit_order.html', {'pizzaform': form, 'note': note, 'pizza': pizza})
+
+    return render(request, 'pizza/edit_order.html', {'pizzaform': form, 'pizza': pizza})

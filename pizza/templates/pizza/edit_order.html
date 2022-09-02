@@ -1,0 +1,12 @@
+<h1> Welcome to Picolla </h1>
+
+<h4> Order </h4>
+
+<h2>{{ note }}</h2>
+
+<form action="{% url 'pizza:edit_order' pizza.id %}" method="post">
+
+    {% csrf_token %}
+    {{ pizzaform }}
+    <input type="submit" value="Confirm Order edit">
+</form>
