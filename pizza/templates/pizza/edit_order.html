@@ -1,12 +1,18 @@
-<h1> Welcome to Picolla </h1>
+{% extends 'pizza/base.html' %}
+{% block 'body' %}
 
-<h4> Order </h4>
+<div class="container">
 
+<h1>Edit Pizza</h1>
 <h2>{{ note }}</h2>
 
-<form action="{% url 'pizza:edit_order' pizza.id %}" method="post">
 
+<form action="{% url 'pizza:edit_order' pizza.id %}" method="post">
     {% csrf_token %}
     {{ pizzaform }}
-    <input type="submit" value="Confirm Order edit">
+    <input type="submit" value="Edit Pizza">
 </form>
+
+</div>
+
+{% endblock %}
